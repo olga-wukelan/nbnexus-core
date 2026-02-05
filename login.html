@@ -2,77 +2,259 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>NBNexus Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBNexus | Secure Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
     <style>
-        body { 
-            background: #0f172a; 
-            color: white; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            font-family: 'Inter', sans-serif; 
+        /* CSS STYLES */
+        :root {
+            --deep-navy: #0f172a;
+            --ocean-blue: #0055ff;
+            --cyan-bright: #00d4ff;
+        }
+        body {
             margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #050A18 0%, #0a2463 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
-        .login-box { 
-            background: rgba(255,255,255,0.05); 
-            padding: 40px; 
-            border-radius: 16px; 
-            width: 350px; 
-            text-align: center; 
-            border: 1px solid rgba(255,255,255,0.1); 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+
+        /* GLASS LOGIN CARD */
+        .login-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px;
+            border-radius: 24px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            animation: fadeIn 0.8s ease-out;
         }
-        h1 { margin-bottom: 30px; font-size: 24px; letter-spacing: 1px;}
-        input { 
-            width: 100%; 
-            padding: 15px; 
-            margin-bottom: 15px; 
-            border-radius: 8px; 
-            border: none; 
-            font-size: 16px; 
-            background: rgba(255,255,255,0.1);
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
             color: white;
-            outline: none;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        input::placeholder { color: rgba(255,255,255,0.5); }
-        button { 
-            width: 100%; 
-            padding: 15px; 
-            background: #0055ff; 
-            color: white; 
-            border: none; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            font-size: 16px; 
+        .subtitle {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        /* INPUT FIELDS */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-group i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+        input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box; /* Fixes padding issues */
+        }
+        input:focus {
+            border-color: var(--cyan-bright);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+
+        /* BUTTONS */
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--ocean-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: var(--cyan-bright);
+            transform: translateY(-2px);
+            color: var(--deep-navy);
+        }
+
+        /* TOGGLE LINK */
+        .switch-mode {
+            margin-top: 20px;
+            color: #94a3b8;
+            font-size: 12px;
+            cursor: pointer;
             transition: 0.2s;
         }
-        button:hover { background: #0044cc; transform: scale(1.02); }
-        #error-msg { color: #ef4444; font-size: 14px; margin-top: 15px; display: none; }
+        .switch-mode:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* ALERTS */
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: left;
+        }
+        .alert-error { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444; }
+        .alert-success { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid #22c55e; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="login-box">
-        <h1>NBNEXUS ACCESS</h1>
-        <input type="email" id="email" placeholder="Email Address">
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="performLogin()">ENTER SYSTEM</button>
-        <p id="error-msg">Access Denied</p>
+    <div class="login-card">
+        <div class="logo"><i class="fas fa-anchor"></i> NBNEXUS</div>
+        <div class="subtitle">Secure Global Access</div>
+
+        <div id="alert-box" class="alert alert-error"></div>
+
+        <div id="login-form">
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="l-email" placeholder="Email Address">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="l-password" placeholder="Password">
+            </div>
+            <button onclick="handleLogin()">ACCESS DASHBOARD</button>
+            <div class="switch-mode" onclick="toggleMode()">First time here? <b>Create Account</b></div>
+        </div>
+
+        <div id="register-form" style="display: none;">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="r-name" placeholder="Full Name (e.g. Cpt. Pasaras)">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="r-email" placeholder="Email Address">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="r-password" placeholder="Choose Password">
+            </div>
+            <button onclick="handleRegister()">CREATE ACCOUNT</button>
+            <div class="switch-mode" onclick="toggleMode()">Already have an account? <b>Login</b></div>
+        </div>
     </div>
 
     <script>
-        async function performLogin() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorMsg = document.getElementById('error-msg');
-            errorMsg.style.display = 'none';
+        // =========================================================
+        // 🌍 CLOUD CONNECTION LINK 🌍
+        // =========================================================
+        const API_URL = "https://nbnexus-live.onrender.com"; 
+        // =========================================================
+
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const alertBox = document.getElementById('alert-box');
+
+        // Toggle between Login and Register screens
+        function toggleMode() {
+            if (loginForm.style.display === "none") {
+                loginForm.style.display = "block";
+                registerForm.style.display = "none";
+                document.querySelector('.subtitle').innerText = "Secure Global Access";
+            } else {
+                loginForm.style.display = "none";
+                registerForm.style.display = "block";
+                document.querySelector('.subtitle').innerText = "Register New Command";
+            }
+            hideAlert();
+        }
+
+        // Helper to show messages
+        function showAlert(msg, type) {
+            alertBox.style.display = "block";
+            alertBox.innerText = msg;
+            alertBox.className = "alert " + (type === 'error' ? 'alert-error' : 'alert-success');
+        }
+        function hideAlert() {
+            alertBox.style.display = "none";
+        }
+
+        // --- 1. REGISTER FUNCTION ---
+        async function handleRegister() {
+            const name = document.getElementById('r-name').value;
+            const email = document.getElementById('r-email').value;
+            const password = document.getElementById('r-password').value;
+
+            if (!name || !email || !password) return showAlert("Please fill in all fields.", "error");
+
+            showAlert("Contacting HQ...", "success");
 
             try {
-                // Talk to the Brain
-                const response = await fetch('http://127.0.0.1:8000/login/', {
+                const response = await fetch(`${API_URL}/register/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ full_name: name, email: email, password: password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert("✅ Account Created! Switching to Login...", "success");
+                    setTimeout(() => {
+                        toggleMode();
+                        document.getElementById('l-email').value = email; // Auto-fill email
+                    }, 1500);
+                } else {
+                    showAlert("❌ Error: " + (data.detail || "Registration failed"), "error");
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert("⚠️ Connection Error. Is the server awake?", "error");
+            }
+        }
+
+        // --- 2. LOGIN FUNCTION ---
+        async function handleLogin() {
+            const email = document.getElementById('l-email').value;
+            const password = document.getElementById('l-password').value;
+
+            if (!email || !password) return showAlert("Enter email and password.", "error");
+
+            showAlert("Verifying Credentials...", "success");
+
+            try {
+                const response = await fetch(`${API_URL}/login/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email, password: password })
@@ -81,17 +263,21 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // SUCCESS! Save the ID card and Open Dashboard
-sessionStorage.setItem("nbnexus_user", data.user); 
-window.location.href = "index.html";
+                    // STORE THE SESSION KEY
+                    sessionStorage.setItem("nbnexus_user", data.user);
+                    
+                    showAlert("✅ Access Granted. Loading Dashboard...", "success");
+                    
+                    // REDIRECT TO DASHBOARD
+                    setTimeout(() => {
+                        window.location.href = "index.html"; 
+                    }, 1000);
                 } else {
-                    // FAIL: Show error
-                    errorMsg.style.display = "block";
-                    errorMsg.innerText = data.detail || "Login Failed";
+                    showAlert("⛔ Access Denied: " + (data.detail || "Invalid password"), "error");
                 }
-            } catch (error) {
-                errorMsg.style.display = "block";
-                errorMsg.innerText = "System Offline - Check Terminal";
+            } catch (err) {
+                console.error(err);
+                showAlert("⚠️ Server unreachable. Check internet.", "error");
             }
         }
     </script>
