@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NBNexus.ai | Intelligent Lifecycle Management</title>
+    <title>NBNexus.ai | Command Center</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -17,335 +17,248 @@
             --deep-navy: #0f172a;
             --ocean-blue: #0055ff;
             --cyan-bright: #00d4ff;
+            --alert-red: #ef4444;
+            --success-green: #22c55e;
             --white-glass: rgba(255, 255, 255, 0.95);
-            --text-dark: #1e293b;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: linear-gradient(180deg, #050A18 0%, #0a2463 40%, #00d4ff 100%); min-height: 100vh; color: var(--text-dark); overflow-x: hidden; }
+        body { background: #0f172a; height: 100vh; color: #1e293b; overflow: hidden; display: flex; flex-direction: column; }
 
         /* NAV */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 25px 60px; width: 100%; position: absolute; top: 0; z-index: 100; }
-        .logo-container { color: white; font-weight: 800; font-size: 24px; display: flex; align-items: center; gap: 10px; }
-        
-        /* HERO */
-        .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 140px; padding-bottom: 100px; }
-        .hero h1 { font-size: 80px; font-weight: 800; color: white; line-height: 1; margin-bottom: 10px; }
-        .hero h2 { font-size: 20px; color: rgba(255,255,255,0.7); letter-spacing: 4px; margin-bottom: 50px; text-transform: uppercase; }
-        .btn-hero { background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%); color: white; padding: 18px 50px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 16px; margin-bottom: 80px; z-index: 10; }
+        nav { background: #1e293b; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; z-index: 100; height: 60px; }
+        .logo { font-weight: 800; font-size: 20px; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .nav-right { display: flex; gap: 20px; align-items: center; font-size: 14px; }
+        .status-dot { width: 8px; height: 8px; background: var(--success-green); border-radius: 50%; display: inline-block; }
 
-        /* CARDS */
-        .cards-container { display: flex; justify-content: center; gap: 30px; max-width: 1200px; width: 90%; margin: 0 auto; position: relative; z-index: 10; }
-        .card { background: var(--white-glass); padding: 40px 30px; border-radius: 24px; flex: 1; box-shadow: 0 20px 50px rgba(0,0,0,0.2); transition: transform 0.3s; }
-        .card:hover { transform: translateY(-10px); }
-        .card-icon { width: 60px; height: 60px; background: #0f172a; border-radius: 16px; display: flex; justify-content: center; align-items: center; margin-bottom: 25px; color: white; font-size: 24px; }
-        .card h3 { font-size: 20px; font-weight: 800; color: var(--deep-navy); margin-bottom: 15px; }
-        .card-line { height: 4px; width: 60px; background: var(--cyan-bright); border-radius: 2px; }
-
-        /* DASHBOARD PREVIEW */
-        .dashboard-preview { max-width: 1000px; width: 85%; height: 500px; background: white; margin: -100px auto 0; border-radius: 24px 24px 0 0; position: relative; z-index: 5; display: flex; overflow: hidden; }
-        .ui-sidebar { width: 220px; background: #f1f5f9; padding: 30px 20px; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; }
-        .ui-content { flex: 1; background: #f8fafc; padding: 0; position: relative; } 
+        /* MAIN LAYOUT */
+        .layout { display: flex; height: calc(100vh - 60px); }
         
-        /* REAL MAP CONTAINER */
+        /* SIDEBAR (LEFT) */
+        .sidebar { width: 260px; background: #f8fafc; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 20px; z-index: 20; }
+        .sidebar h3 { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; font-weight: 700; }
+        
+        .fleet-item { 
+            padding: 12px; background: white; border: 1px solid #e2e8f0; 
+            border-radius: 8px; margin-bottom: 10px; cursor: pointer; 
+            transition: 0.2s; border-left: 3px solid transparent;
+        }
+        .fleet-item:hover { border-left-color: var(--ocean-blue); transform: translateX(5px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .ship-name { font-weight: 700; font-size: 14px; color: var(--deep-navy); }
+        .ship-type { font-size: 11px; color: #64748b; }
+
+        /* MAP AREA */
+        .map-container { flex: 1; position: relative; }
         #map { width: 100%; height: 100%; z-index: 1; }
 
-        /* LIVE ALERT BOX */
-        .ui-alert-box { 
-            position: absolute; top: 20px; right: 20px; width: 280px; 
-            background: white; padding: 20px; border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
-            border-left: 5px solid #ef4444; 
-            z-index: 999; 
-            display: none; 
+        /* TECH PANEL (RIGHT - HIDDEN BY DEFAULT) */
+        .tech-panel { 
+            width: 350px; background: white; border-left: 1px solid #e2e8f0; 
+            padding: 0; position: absolute; right: -350px; top: 0; bottom: 0; 
+            transition: right 0.3s ease; z-index: 30; display: flex; flex-direction: column;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
         }
-        .ui-alert-title { font-size: 13px; font-weight: bold; color: #ef4444; margin-bottom: 5px; display: flex; align-items: center; gap: 5px;}
-        .ui-alert-text { font-size: 12px; color: #475569; line-height: 1.4; }
-        .blink { animation: blinker 1.5s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
-
-        /* SEARCH SECTION */
-        .search-section { padding: 80px 20px; text-align: center; background: white; }
-        .search-section h2 { color: #0f172a; font-size: 36px; margin-bottom: 40px; font-weight: 800; }
-        .search-box { margin-bottom: 50px; display: flex; justify-content: center; gap: 10px; }
-        .search-box input { padding: 15px 25px; border-radius: 50px; border: 2px solid #e2e8f0; width: 300px; font-size: 16px; outline: none; }
-        .search-box button { background: #0055ff; color: white; border: none; padding: 15px 40px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .search-box button:hover { background: #0044cc; transform: scale(1.05); }
-        .results-grid { display: flex; flex-direction: column; align-items: center; gap: 20px; max-width: 800px; margin: 0 auto; }
+        .tech-panel.active { right: 0; }
         
-        .provider-card { background: white; padding: 25px; border-radius: 16px; width: 100%; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; text-align: left; }
-        .platinum-border { border: 2px solid #f59e0b; box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15); background: #fffbeb; }
-        .badge { font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 5px 10px; border-radius: 20px; letter-spacing: 1px; }
-        .badge-platinum { background: #f59e0b; color: white; }
-        .badge-free { background: #cbd5e1; color: #475569; }
-        .p-name { font-weight: 700; font-size: 18px; color: #0f172a; display: block; }
-        .p-type { color: #64748b; font-size: 14px; margin-top: 5px; display: block; }
+        .panel-header { padding: 20px; background: #1e293b; color: white; display: flex; justify-content: space-between; align-items: center; }
+        .panel-content { padding: 20px; overflow-y: auto; flex: 1; }
+        
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .stat-box { background: #f1f5f9; padding: 15px; border-radius: 12px; text-align: center; }
+        .stat-val { font-size: 18px; font-weight: 800; color: var(--deep-navy); }
+        .stat-label { font-size: 11px; color: #64748b; text-transform: uppercase; margin-top: 5px; }
+
+        .cert-list { display: flex; flex-direction: column; gap: 10px; }
+        .cert-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+        .status-ok { color: var(--success-green); font-weight: bold; }
+        .status-warn { color: #f59e0b; font-weight: bold; }
+
+        /* ALERTS */
+        .ai-alert { 
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%); 
+            background: rgba(15, 23, 42, 0.9); color: white; padding: 10px 20px; 
+            border-radius: 30px; font-size: 13px; display: none; align-items: center; gap: 10px; z-index: 40;
+        }
 
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo-container"><i class="fas fa-anchor"></i> NBNEXUS</div>
-        
-        <div style="display: flex; gap: 20px; align-items: center;">
-            <div id="user-display" style="color: white; font-weight: 600;"></div>
-            <button onclick="logout()" style="background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 8px 20px; border-radius: 20px; cursor: pointer;">LOGOUT</button>
+        <div class="logo"><i class="fas fa-anchor"></i> NBNEXUS <span style="font-weight:300; opacity:0.7;">| COMMAND</span></div>
+        <div class="nav-right">
+            <div><span class="status-dot"></span> System Online</div>
+            <div id="user-display" style="font-weight: 600;">Loading...</div>
+            <button onclick="logout()" style="background:none; border:none; color:white; cursor:pointer; opacity:0.7;">(Logout)</button>
         </div>
     </nav>
 
-    <div class="hero">
-        <h1>NB-NEXUS</h1>
-        <h2>INTELLIGENT LIFECYCLE MANAGEMENT</h2>
-        <a href="#" class="btn-hero">REQUEST DEMO</a>
+    <div class="layout">
         
-        <div class="cards-container">
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-file-contract"></i></div>
-                <h3>Technical<br>Compliance</h3>
-                <div class="card-line"></div>
+        <div class="sidebar">
+            <h3>Active Fleet</h3>
+            <div id="fleet-list">
+                <div style="padding:10px; text-align:center; color:#94a3b8;">Loading vessels...</div>
             </div>
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-network-wired"></i></div>
-                <h3>Strategic<br>Intelligence</h3>
-                <div class="card-line"></div>
-            </div>
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-globe"></i></div>
-                <h3>Commercial<br>Connectivity</h3>
-                <div class="card-line"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="dashboard-preview">
-        <div class="ui-sidebar">
-            <h3 style="font-size: 14px; color: #64748b; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">My Fleet</h3>
             
-            <div id="fleet-list" style="display: flex; flex-direction: column; gap: 10px; flex: 1;">
-                <div style="font-size: 12px; color: #94a3b8;">Loading fleet...</div>
+            <div style="margin-top:auto;">
+                <h3>Intel Feed</h3>
+                <textarea id="intel-input" placeholder="Paste report..." style="width:100%; border:1px solid #e2e8f0; padding:10px; border-radius:8px; font-size:12px; resize:none;"></textarea>
+                <button onclick="processIntel()" style="width:100%; margin-top:10px; background:#0f172a; color:white; padding:10px; border:none; border-radius:8px; cursor:pointer; font-size:12px;">ANALYZE</button>
             </div>
-
-            <button onclick="addShipMock()" style="margin-top: auto; width: 100%; padding: 10px; background: white; border: 1px dashed #cbd5e1; color: #64748b; border-radius: 8px; cursor: pointer; font-size: 12px;">+ Add Vessel</button>
-
-            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #e2e8f0;">
-
-            <h3 style="font-size: 14px; color: #64748b; margin-bottom: 10px; text-transform: uppercase;">Intel Feed</h3>
-            <textarea id="intel-input" placeholder="Paste raw report here... (e.g. 'Drone sighted')" style="width: 100%; height: 80px; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-family: sans-serif; font-size: 12px; resize: none;"></textarea>
-            <button onclick="processIntel()" style="margin-top: 10px; width: 100%; padding: 10px; background: #0f172a; color: white; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold;">ANALYZE DATA</button>
         </div>
 
-        <div class="ui-content">
+        <div class="map-container">
             <div id="map"></div>
-            
-            <div id="ai-alert" class="ui-alert-box">
-                <div class="ui-alert-title">
-                    <i class="fas fa-circle blink"></i> LIVE AI WARNING
+            <div id="ai-alert" class="ai-alert"><i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i> <span id="alert-text">Warning</span></div>
+        </div>
+
+        <div id="tech-panel" class="tech-panel">
+            <div class="panel-header">
+                <div id="panel-title" style="font-weight:700;">VESSEL DETAILS</div>
+                <i class="fas fa-times" style="cursor:pointer;" onclick="closePanel()"></i>
+            </div>
+            <div class="panel-content">
+                
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <div class="stat-val" style="color:var(--success-green);">98%</div>
+                        <div class="stat-label">Compliance</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-val">14.2 kn</div>
+                        <div class="stat-label">Speed</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-val">ME-C</div>
+                        <div class="stat-label">Main Engine</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-val">Oct 26</div>
+                        <div class="stat-label">Next Survey</div>
+                    </div>
                 </div>
-                <div id="ai-message" class="ui-alert-text">Loading Intelligence...</div>
+
+                <h3>Certificate Status</h3>
+                <div class="cert-list">
+                    <div class="cert-item">
+                        <span>Safety Construction</span>
+                        <span class="status-ok">VALID</span>
+                    </div>
+                    <div class="cert-item">
+                        <span>Safety Equipment</span>
+                        <span class="status-ok">VALID</span>
+                    </div>
+                    <div class="cert-item">
+                        <span>IOPP (Marpol)</span>
+                        <span class="status-ok">VALID</span>
+                    </div>
+                    <div class="cert-item">
+                        <span>Load Line</span>
+                        <span class="status-warn">EXPIRING SOON</span>
+                    </div>
+                </div>
+
+                <button style="width:100%; margin-top:30px; padding:15px; background:var(--ocean-blue); color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer;">
+                    <i class="fas fa-file-pdf"></i> DOWNLOAD SURVEY REPORT
+                </button>
+
             </div>
         </div>
-    </div>
 
-    <div class="search-section">
-        <h2>Global Service Network</h2>
-        <div class="search-box">
-            <input type="text" id="countryInput" placeholder="Enter Country (e.g. Morocco)">
-            <button onclick="findProviders()">SEARCH</button>
-        </div>
-        <div id="results-area" class="results-grid"></div>
     </div>
 
     <script>
-        
         // =========================================================
-        // 🌍 LIVE CLOUD CONNECTION ESTABLISHED 🌍
+        // 🌍 LIVE LINK 🌍
         // =========================================================
         const API_URL = "https://nbnexus-live.onrender.com"; 
         // =========================================================
 
-        // --- 1. SECURITY CHECKPOINT ---
+        // SECURITY CHECK
         const user = sessionStorage.getItem("nbnexus_user");
+        if (!user) window.location.href = "login.html";
+        document.getElementById('user-display').innerText = user;
 
-        if (user) {
-            document.getElementById('user-display').innerText = "Cmdr. " + user; 
-        }
-
-        // --- 2. LOGOUT FUNCTION ---
         function logout() {
             sessionStorage.removeItem("nbnexus_user");
             window.location.href = "login.html";
         }
 
-        // --- 3. INITIALIZE THE MAP ---
-        var map = L.map('map').setView([25, 40], 3); 
-
+        // MAP SETUP
+        var map = L.map('map').setView([25, 55], 4);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
+            attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        // --- 4. CHECK RISKS (Startup Check) ---
-        async function checkRisks() {
-            try {
-                const response = await fetch(`${API_URL}/check-risk/Red Sea`);
-                const data = await response.json();
-
-                if (data.status === "WARNING") {
-                    const alertBox = document.getElementById('ai-alert');
-                    const messageBox = document.getElementById('ai-message');
-                    alertBox.style.display = "block";
-                    
-                    const alert = data.alerts[0];
-                    messageBox.innerHTML = `
-                        <strong style="color:red;">${alert.headline}</strong><br>
-                        <strong>REGION:</strong> ${alert.region}<br>
-                        <strong>ADVICE:</strong> ${alert.ai_advice}
-                    `;
-
-                    // Draw Red Zone
-                    var circle = L.circle([20, 38], {
-                        color: 'red',
-                        fillColor: '#f03',
-                        fillOpacity: 0.3,
-                        radius: 800000 
-                    }).addTo(map);
-                }
-            } catch (error) {
-                console.log("Brain is offline or sleeping...");
-            }
+        // UI HELPERS
+        function openPanel(shipName) {
+            document.getElementById('panel-title').innerText = shipName.toUpperCase();
+            document.getElementById('tech-panel').classList.add('active');
+        }
+        function closePanel() {
+            document.getElementById('tech-panel').classList.remove('active');
         }
 
-        // --- 5. COMMERCIAL SEARCH ---
-        async function findProviders() {
-            const country = document.getElementById('countryInput').value;
-            const resultsArea = document.getElementById('results-area');
-            resultsArea.innerHTML = '<p>Searching Network...</p>';
-
-            try {
-                const response = await fetch(`${API_URL}/find-service/${country}`);
-                const data = await response.json();
-                resultsArea.innerHTML = '';
-
-                data.forEach(provider => {
-                    const isPlatinum = provider.tier === 'platinum';
-                    const borderClass = isPlatinum ? 'platinum-border' : '';
-                    const badgeHtml = isPlatinum 
-                        ? '<span class="badge badge-platinum">PLATINUM VERIFIED</span>' 
-                        : '<span class="badge badge-free">LISTING</span>';
-
-                    if (isPlatinum) {
-                        L.marker([33.5731, -7.5898]).addTo(map)
-                            .bindPopup("<b>" + provider.name + "</b><br>Authorized Service Provider")
-                            .openPopup();
-                        map.flyTo([33.5731, -7.5898], 6);
-                    }
-
-                    const cardHtml = `
-                        <div class="provider-card ${borderClass}">
-                            <div><span class="p-name">${provider.name}</span><span class="p-type">${provider.facility_type} | ${provider.city}</span></div>
-                            <div>${badgeHtml}</div>
-                        </div>
-                    `;
-                    resultsArea.innerHTML += cardHtml;
-                });
-            } catch (error) {
-                resultsArea.innerHTML = '<p style="color:red">Brain offline.</p>';
-            }
-        }
-
-        // --- 6. FLEET MANAGEMENT (With Tracking) ---
+        // LOAD FLEET (With "Click to Open Panel" logic)
         async function loadFleet() {
-            const userEmail = "nikos@nbnexus.ai"; 
             const list = document.getElementById('fleet-list');
+            // Mock data for demo (since DB resets on free tier)
+            const fleet = [
+                { name: "NBN Explorer", type: "LNG Carrier", lat: 24.5, lng: 54.4 },
+                { name: "NBN Voyager", type: "Oil Tanker", lat: 26.1, lng: 56.2 },
+                { name: "NBN Spirit", type: "Bulk Carrier", lat: 12.5, lng: 48.0 } // Near pirates
+            ];
 
+            list.innerHTML = "";
+
+            fleet.forEach(ship => {
+                // Add to List
+                const item = document.createElement("div");
+                item.className = "fleet-item";
+                item.innerHTML = `
+                    <div class="ship-name">${ship.name}</div>
+                    <div class="ship-type">${ship.type}</div>
+                `;
+                item.onclick = () => {
+                    map.flyTo([ship.lat, ship.lng], 7);
+                    openPanel(ship.name);
+                };
+                list.appendChild(item);
+
+                // Add to Map
+                const marker = L.marker([ship.lat, ship.lng]).addTo(map);
+                marker.bindPopup(`<b>${ship.name}</b><br>Click sidebar for details.`);
+                marker.on('click', () => openPanel(ship.name));
+            });
+        }
+
+        // INTEL AI (Simplified)
+        async function processIntel() {
+            const text = document.getElementById('intel-input').value;
+            if(!text) return;
+            
             try {
-                const response = await fetch(`${API_URL}/my-fleet/${userEmail}`);
-                const ships = await response.json();
-
-                list.innerHTML = ""; 
-
-                if (ships.length === 0) {
-                    list.innerHTML = '<div style="font-size: 12px; color: #94a3b8;">No vessels tracked.</div>';
+                const res = await fetch(`${API_URL}/analyze-intel/`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ raw_text: text })
+                });
+                const data = await res.json();
+                
+                // Show Alert
+                const alertBox = document.getElementById('ai-alert');
+                document.getElementById('alert-text').innerText = `${data.analysis.headline}: ${data.analysis.ai_advice}`;
+                alertBox.style.display = "flex";
+                
+                // Red Zone if High Risk
+                if(data.analysis.risk_level === "CRITICAL" || data.analysis.risk_level === "HIGH") {
+                    L.circle([12.5, 48.0], { color: 'red', radius: 500000 }).addTo(map);
                 }
 
-                ships.forEach(ship => {
-                    // SIMULATION: Random Coordinate
-                    const lat = (Math.random() * 100) - 50; 
-                    const lng = (Math.random() * 360) - 180; 
-
-                    const shipCard = document.createElement("div");
-                    shipCard.style.cssText = "background: white; padding: 12px; border-radius: 8px; border-left: 4px solid #0055ff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s;";
-                    shipCard.innerHTML = `
-                        <div style="font-weight: 700; font-size: 13px; color: #0f172a;">${ship.name}</div>
-                        <div style="font-size: 11px; color: #64748b;">${ship.ship_type}</div>
-                        <div style="font-size: 10px; color: #00d4ff; margin-top: 5px;"><i class="fas fa-satellite-dish"></i> SIGNAL ACTIVE</div>
-                    `;
-
-                    // Click to fly to ship
-                    shipCard.onclick = function() {
-                        map.flyTo([lat, lng], 6);
-                        L.marker([lat, lng]).addTo(map)
-                            .bindPopup(`<b>${ship.name}</b><br>Type: ${ship.ship_type}<br>Status: En Route`)
-                            .openPopup();
-                    };
-
-                    list.appendChild(shipCard);
-                });
-
-            } catch (error) {
-                console.log("Fleet Error");
-            }
+            } catch (e) { alert("AI Offline"); }
         }
 
-        async function addShipMock() {
-            const shipName = prompt("Enter Ship Name:");
-            if (shipName) {
-                await fetch(`${API_URL}/add-ship/`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        name: shipName, 
-                        imo: "999999", 
-                        type: "LNG Carrier", 
-                        owner_email: "nikos@nbnexus.ai" 
-                    })
-                });
-                loadFleet(); 
-            }
-        }
-
-        // --- 7. AI INTEL PROCESSOR ---
-        async function processIntel() {
-            const rawText = document.getElementById('intel-input').value;
-            if (!rawText) return alert("Please enter intel data.");
-
-            // Send text to Brain
-            const response = await fetch(`${API_URL}/analyze-intel/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ raw_text: rawText })
-            });
-
-            const data = await response.json();
-            const analysis = data.analysis;
-
-            // Show Result on Map Screen
-            const alertBox = document.getElementById('ai-alert');
-            const messageBox = document.getElementById('ai-message');
-            
-            alertBox.style.display = "block";
-            messageBox.innerHTML = `
-                <strong style="color: ${analysis.risk_level === 'CRITICAL' ? 'red' : 'orange'}">${analysis.headline}</strong><br>
-                Risk Level: ${analysis.risk_level}<br>
-                <span style="font-style: italic;">"${analysis.ai_advice}"</span>
-            `;
-
-            // Clear the box
-            document.getElementById('intel-input').value = "";
-            alert("Intel Processed. Risk Level: " + analysis.risk_level);
-        }
-
-        // RUN STARTUP CHECKS
-        checkRisks();
+        // Init
         loadFleet();
 
     </script>
