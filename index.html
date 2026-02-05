@@ -3,305 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NBNexus.ai | Command Center</title>
-    
+    <title>NBNexus | Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <style>
-        /* CORE STYLES */
-        :root {
-            --deep-navy: #0f172a;
-            --ocean-blue: #0055ff;
-            --cyan-bright: #00d4ff;
-            --alert-red: #ef4444;
-            --success-green: #22c55e;
-            --white-glass: rgba(255, 255, 255, 0.95);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: #0f172a; height: 100vh; color: #1e293b; overflow: hidden; display: flex; flex-direction: column; }
-
-        /* NAV */
-        nav { background: #1e293b; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; z-index: 100; height: 60px; }
-        .logo { font-weight: 800; font-size: 20px; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .nav-right { display: flex; gap: 20px; align-items: center; font-size: 14px; }
-        .status-dot { width: 8px; height: 8px; background: var(--success-green); border-radius: 50%; display: inline-block; }
-
-        /* MAIN LAYOUT */
-        .layout { display: flex; height: calc(100vh - 60px); }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: #0f172a; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         
-        /* SIDEBAR (LEFT) */
-        .sidebar { width: 260px; background: #f8fafc; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 20px; z-index: 20; }
-        .sidebar h3 { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; font-weight: 700; }
+        /* CARD */
+        .login-card { background: white; padding: 40px; border-radius: 24px; width: 380px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
         
-        .fleet-item { 
-            padding: 12px; background: white; border: 1px solid #e2e8f0; 
-            border-radius: 8px; margin-bottom: 10px; cursor: pointer; 
-            transition: 0.2s; border-left: 3px solid transparent;
-        }
-        .fleet-item:hover { border-left-color: var(--ocean-blue); transform: translateX(5px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .ship-name { font-weight: 700; font-size: 14px; color: var(--deep-navy); }
-        .ship-type { font-size: 11px; color: #64748b; }
-
-        /* MAP AREA */
-        .map-container { flex: 1; position: relative; }
-        #map { width: 100%; height: 100%; z-index: 1; }
-
-        /* TECH PANEL (RIGHT - SLIDE OUT) */
-        .tech-panel { 
-            width: 400px; background: white; border-left: 1px solid #e2e8f0; 
-            padding: 0; position: absolute; right: -400px; top: 0; bottom: 0; 
-            transition: right 0.3s ease; z-index: 30; display: flex; flex-direction: column;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-        }
-        .tech-panel.active { right: 0; }
+        /* LOGO */
+        .logo-img { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0, 85, 255, 0.2); }
         
-        .panel-header { padding: 20px; background: #1e293b; color: white; display: flex; justify-content: space-between; align-items: center; }
-        .panel-content { padding: 20px; overflow-y: auto; flex: 1; }
-        
-        /* GRAPHS & STATS */
-        .chart-container { width: 100%; height: 200px; margin-bottom: 20px; background: #f8fafc; padding: 10px; border-radius: 12px; }
-        
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .stat-box { background: #f1f5f9; padding: 15px; border-radius: 12px; text-align: center; }
-        .stat-val { font-size: 18px; font-weight: 800; color: var(--deep-navy); }
-        .stat-label { font-size: 11px; color: #64748b; text-transform: uppercase; margin-top: 5px; }
+        h2 { color: #0f172a; margin-bottom: 5px; font-weight: 800; }
+        p { color: #64748b; font-size: 14px; margin-bottom: 30px; }
 
-        .cert-list { display: flex; flex-direction: column; gap: 10px; }
-        .cert-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
-        .status-ok { color: var(--success-green); font-weight: bold; }
-        .status-warn { color: #f59e0b; font-weight: bold; }
+        input { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; margin-bottom: 15px; font-size: 15px; outline: none; transition: 0.3s; box-sizing: border-box; }
+        input:focus { border-color: #0055ff; }
 
-        /* ALERTS */
-        .ai-alert { 
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%); 
-            background: rgba(15, 23, 42, 0.9); color: white; padding: 10px 20px; 
-            border-radius: 30px; font-size: 13px; display: none; align-items: center; gap: 10px; z-index: 40;
-        }
+        button { width: 100%; padding: 15px; background: #0055ff; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #0044cc; transform: translateY(-2px); }
 
+        .toggle-link { margin-top: 20px; font-size: 13px; color: #64748b; cursor: pointer; display: block; }
+        .toggle-link:hover { color: #0055ff; text-decoration: underline; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo"><i class="fas fa-anchor"></i> NBNEXUS <span style="font-weight:300; opacity:0.7;">| COMMAND</span></div>
-        <div class="nav-right">
-            <div><span class="status-dot"></span> System Online</div>
-            <div id="user-display" style="font-weight: 600;">Loading...</div>
-            <button onclick="logout()" style="background:none; border:none; color:white; cursor:pointer; opacity:0.7;">(Logout)</button>
-        </div>
-    </nav>
-
-    <div class="layout">
+    <div class="login-card">
+        <img src="logo-blue.jpeg" class="logo-img" alt="Logo">
         
-        <div class="sidebar">
-            <h3>Active Fleet</h3>
-            <div id="fleet-list">
-                <div style="padding:10px; text-align:center; color:#94a3b8;">Loading vessels...</div>
-            </div>
-            
-            <div style="margin-top:auto;">
-                <h3>Intel Feed</h3>
-                <textarea id="intel-input" placeholder="Paste report (e.g. 'Pirates near Yemen')..." style="width:100%; border:1px solid #e2e8f0; padding:10px; border-radius:8px; font-size:12px; resize:none;"></textarea>
-                <button onclick="processIntel()" style="width:100%; margin-top:10px; background:#0f172a; color:white; padding:10px; border:none; border-radius:8px; cursor:pointer; font-size:12px;">ANALYZE</button>
-            </div>
-        </div>
+        <h2>Welcome Back</h2>
+        <p>Enter your credentials to access the grid.</p>
 
-        <div class="map-container">
-            <div id="map"></div>
-            <div id="ai-alert" class="ai-alert"><i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i> <span id="alert-text">Warning</span></div>
-        </div>
-
-        <div id="tech-panel" class="tech-panel">
-            <div class="panel-header">
-                <div id="panel-title" style="font-weight:700;">VESSEL DETAILS</div>
-                <i class="fas fa-times" style="cursor:pointer;" onclick="closePanel()"></i>
-            </div>
-            <div class="panel-content">
-                
-                <h3 style="font-size:12px; color:#64748b; margin-bottom:10px;">ME Exhaust Temperature (24h)</h3>
-                <div class="chart-container">
-                    <canvas id="engineChart"></canvas>
-                </div>
-
-                <div class="stat-grid">
-                    <div class="stat-box">
-                        <div class="stat-val" style="color:var(--success-green);">98%</div>
-                        <div class="stat-label">Compliance</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-val">14.2 kn</div>
-                        <div class="stat-label">Speed</div>
-                    </div>
-                </div>
-
-                <h3>Certificate Status</h3>
-                <div class="cert-list">
-                    <div class="cert-item">
-                        <span>Safety Construction</span>
-                        <span class="status-ok">VALID</span>
-                    </div>
-                    <div class="cert-item">
-                        <span>Safety Equipment</span>
-                        <span class="status-ok">VALID</span>
-                    </div>
-                    <div class="cert-item">
-                        <span>IOPP (Marpol)</span>
-                        <span class="status-ok">VALID</span>
-                    </div>
-                    <div class="cert-item">
-                        <span>Load Line</span>
-                        <span class="status-warn">EXPIRING SOON</span>
-                    </div>
-                </div>
-
-                <button style="width:100%; margin-top:30px; padding:15px; background:var(--ocean-blue); color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer;">
-                    <i class="fas fa-file-pdf"></i> DOWNLOAD SURVEY REPORT
-                </button>
-
-            </div>
-        </div>
-
+        <input type="email" id="email" placeholder="Email Address">
+        <input type="password" id="password" placeholder="Password">
+        
+        <button onclick="handleLogin()">SECURE LOGIN</button>
+        <span class="toggle-link" onclick="alert('Contact Admin for access')">Forgot Password?</span>
     </div>
 
     <script>
-        // =========================================================
-        // 🌍 LIVE LINK (Render) 🌍
-        // =========================================================
+        // 🌍 LIVE LINK 🌍
         const API_URL = "https://nbnexus-live.onrender.com"; 
-        // =========================================================
 
-        // SECURITY CHECK
-        const user = sessionStorage.getItem("nbnexus_user");
-        if (!user) window.location.href = "login.html";
-        document.getElementById('user-display').innerText = user;
-
-        function logout() {
-            sessionStorage.removeItem("nbnexus_user");
-            window.location.href = "login.html";
-        }
-
-        // MAP SETUP
-        var map = L.map('map').setView([25, 55], 4);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
-
-        // --- CHART ENGINE ---
-        let myChart = null;
-
-        function initChart() {
-            const ctx = document.getElementById('engineChart').getContext('2d');
+        async function handleLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
             
-            // If chart exists, destroy it so we can draw a new one
-            if (myChart) myChart.destroy();
+            if(!email || !password) return alert("Please enter email and password.");
 
-            // Create Gradient
-            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(0, 85, 255, 0.5)');
-            gradient.addColorStop(1, 'rgba(0, 85, 255, 0.0)');
-
-            myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
-                    datasets: [{
-                        label: 'Exhaust Temp (°C)',
-                        data: [350, 355, 360, 358, 362, 365],
-                        borderColor: '#0055ff',
-                        backgroundColor: gradient,
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { display: false }, ticks: { fontSize: 10 } },
-                        y: { display: false }
-                    }
-                }
-            });
-        }
-
-        // UI HELPERS
-        function openPanel(shipName) {
-            document.getElementById('panel-title').innerText = shipName.toUpperCase();
-            document.getElementById('tech-panel').classList.add('active');
-            
-            // Wait 300ms for slide animation, then draw chart
-            setTimeout(initChart, 300);
-        }
-
-        function closePanel() {
-            document.getElementById('tech-panel').classList.remove('active');
-        }
-
-        // LOAD FLEET 
-        async function loadFleet() {
-            const list = document.getElementById('fleet-list');
-            // Mock data for demo 
-            const fleet = [
-                { name: "NBN Explorer", type: "LNG Carrier", lat: 24.5, lng: 54.4 },
-                { name: "NBN Voyager", type: "Oil Tanker", lat: 26.1, lng: 56.2 },
-                { name: "NBN Spirit", type: "Bulk Carrier", lat: 12.5, lng: 48.0 } 
-            ];
-
-            list.innerHTML = "";
-
-            fleet.forEach(ship => {
-                const item = document.createElement("div");
-                item.className = "fleet-item";
-                item.innerHTML = `
-                    <div class="ship-name">${ship.name}</div>
-                    <div class="ship-type">${ship.type}</div>
-                `;
-                item.onclick = () => {
-                    map.flyTo([ship.lat, ship.lng], 7);
-                    openPanel(ship.name);
-                };
-                list.appendChild(item);
-
-                const marker = L.marker([ship.lat, ship.lng]).addTo(map);
-                marker.bindPopup(`<b>${ship.name}</b><br>Click sidebar for details.`);
-                marker.on('click', () => openPanel(ship.name));
-            });
-        }
-
-        // INTEL AI
-        async function processIntel() {
-            const text = document.getElementById('intel-input').value;
-            if(!text) return;
-            
             try {
-                const res = await fetch(`${API_URL}/analyze-intel/`, {
+                const res = await fetch(`${API_URL}/login/`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ raw_text: text })
+                    body: JSON.stringify({email, password})
                 });
                 const data = await res.json();
                 
-                const alertBox = document.getElementById('ai-alert');
-                document.getElementById('alert-text').innerText = `${data.analysis.headline}: ${data.analysis.ai_advice}`;
-                alertBox.style.display = "flex";
-                
-                if(data.analysis.risk_level === "CRITICAL" || data.analysis.risk_level === "HIGH") {
-                    L.circle([12.5, 48.0], { color: 'red', radius: 500000 }).addTo(map);
+                if(res.ok) {
+                    sessionStorage.setItem("nbnexus_user", data.user);
+                    window.location.href = "index.html";
+                } else {
+                    alert("Access Denied: " + data.detail);
                 }
-
-            } catch (e) { alert("AI Offline"); }
+            } catch(e) { alert("Server Offline"); }
         }
-
-        // Init
-        loadFleet();
-
     </script>
 </body>
 </html>
