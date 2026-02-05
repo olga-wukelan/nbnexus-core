@@ -3,282 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NBNexus | Secure Access</title>
+    <title>NBNexus | Access</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
     <style>
-        /* CSS STYLES */
-        :root {
-            --deep-navy: #0f172a;
-            --ocean-blue: #0055ff;
-            --cyan-bright: #00d4ff;
-        }
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #050A18 0%, #0a2463 100%);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: #0f172a; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        
+        /* CARD */
+        .login-card { background: white; padding: 40px; border-radius: 24px; width: 380px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        
+        /* LOGO */
+        .logo-img { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0, 85, 255, 0.2); }
+        
+        h2 { color: #0f172a; margin-bottom: 5px; font-weight: 800; }
+        p { color: #64748b; font-size: 14px; margin-bottom: 30px; }
 
-        /* GLASS LOGIN CARD */
-        .login-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 50px;
-            border-radius: 24px;
-            width: 400px;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            animation: fadeIn 0.8s ease-out;
-        }
+        input { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; margin-bottom: 15px; font-size: 15px; outline: none; transition: 0.3s; box-sizing: border-box; }
+        input:focus { border-color: #0055ff; }
 
-        .logo {
-            font-size: 28px;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .subtitle {
-            color: #94a3b8;
-            font-size: 14px;
-            margin-bottom: 40px;
-        }
+        button { width: 100%; padding: 15px; background: #0055ff; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #0044cc; transform: translateY(-2px); }
 
-        /* INPUT FIELDS */
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-        .input-group i {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-        }
-        input {
-            width: 100%;
-            padding: 15px 15px 15px 50px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid #334155;
-            border-radius: 12px;
-            color: white;
-            font-size: 14px;
-            outline: none;
-            transition: 0.3s;
-            box-sizing: border-box; /* Fixes padding issues */
-        }
-        input:focus {
-            border-color: var(--cyan-bright);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
-        }
-
-        /* BUTTONS */
-        button {
-            width: 100%;
-            padding: 15px;
-            background: var(--ocean-blue);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-        button:hover {
-            background: var(--cyan-bright);
-            transform: translateY(-2px);
-            color: var(--deep-navy);
-        }
-
-        /* TOGGLE LINK */
-        .switch-mode {
-            margin-top: 20px;
-            color: #94a3b8;
-            font-size: 12px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .switch-mode:hover {
-            color: white;
-            text-decoration: underline;
-        }
-
-        /* ALERTS */
-        .alert {
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-bottom: 20px;
-            display: none;
-            text-align: left;
-        }
-        .alert-error { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444; }
-        .alert-success { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid #22c55e; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .toggle-link { margin-top: 20px; font-size: 13px; color: #64748b; cursor: pointer; display: block; }
+        .toggle-link:hover { color: #0055ff; text-decoration: underline; }
+        
+        /* Hidden Elements */
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
     <div class="login-card">
-        <div class="logo"><i class="fas fa-anchor"></i> NBNEXUS</div>
-        <div class="subtitle">Secure Global Access</div>
-
-        <div id="alert-box" class="alert alert-error"></div>
+        <img src="logo-blue.jpeg" class="logo-img" alt="Logo">
+        
+        <h2 id="card-title">Welcome Back</h2>
+        <p id="card-desc">Enter your credentials to access the grid.</p>
 
         <div id="login-form">
-            <div class="input-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="l-email" placeholder="Email Address">
-            </div>
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="l-password" placeholder="Password">
-            </div>
-            <button onclick="handleLogin()">ACCESS DASHBOARD</button>
-            <div class="switch-mode" onclick="toggleMode()">First time here? <b>Create Account</b></div>
+            <input type="email" id="l-email" placeholder="Email Address">
+            <input type="password" id="l-password" placeholder="Password">
+            <button onclick="handleLogin()">SECURE LOGIN</button>
+            <span class="toggle-link" onclick="toggleMode()">New User? <b>Create Account</b></span>
         </div>
 
-        <div id="register-form" style="display: none;">
-            <div class="input-group">
-                <i class="fas fa-user"></i>
-                <input type="text" id="r-name" placeholder="Full Name (e.g. Cpt. Pasaras)">
-            </div>
-            <div class="input-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="r-email" placeholder="Email Address">
-            </div>
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="r-password" placeholder="Choose Password">
-            </div>
-            <button onclick="handleRegister()">CREATE ACCOUNT</button>
-            <div class="switch-mode" onclick="toggleMode()">Already have an account? <b>Login</b></div>
+        <div id="register-form" class="hidden">
+            <input type="text" id="r-name" placeholder="Full Name (e.g. Cpt. Pasaras)">
+            <input type="email" id="r-email" placeholder="Email Address">
+            <input type="password" id="r-password" placeholder="Choose Password">
+            <button onclick="handleRegister()">REGISTER ACCOUNT</button>
+            <span class="toggle-link" onclick="toggleMode()">Has Account? <b>Back to Login</b></span>
         </div>
     </div>
 
     <script>
-        // =========================================================
-        // 🌍 CLOUD CONNECTION LINK 🌍
-        // =========================================================
+        // 🌍 LIVE LINK 🌍
         const API_URL = "https://nbnexus-live.onrender.com"; 
-        // =========================================================
 
         const loginForm = document.getElementById('login-form');
         const registerForm = document.getElementById('register-form');
-        const alertBox = document.getElementById('alert-box');
+        const title = document.getElementById('card-title');
+        const desc = document.getElementById('card-desc');
 
-        // Toggle between Login and Register screens
         function toggleMode() {
-            if (loginForm.style.display === "none") {
-                loginForm.style.display = "block";
-                registerForm.style.display = "none";
-                document.querySelector('.subtitle').innerText = "Secure Global Access";
+            if(loginForm.classList.contains('hidden')) {
+                // Show Login
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                title.innerText = "Welcome Back";
+                desc.innerText = "Enter your credentials to access the grid.";
             } else {
-                loginForm.style.display = "none";
-                registerForm.style.display = "block";
-                document.querySelector('.subtitle').innerText = "Register New Command";
+                // Show Register
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                title.innerText = "New Commander";
+                desc.innerText = "Register your secure identity.";
             }
-            hideAlert();
         }
 
-        // Helper to show messages
-        function showAlert(msg, type) {
-            alertBox.style.display = "block";
-            alertBox.innerText = msg;
-            alertBox.className = "alert " + (type === 'error' ? 'alert-error' : 'alert-success');
-        }
-        function hideAlert() {
-            alertBox.style.display = "none";
-        }
-
-        // --- 1. REGISTER FUNCTION ---
         async function handleRegister() {
             const name = document.getElementById('r-name').value;
             const email = document.getElementById('r-email').value;
             const password = document.getElementById('r-password').value;
 
-            if (!name || !email || !password) return showAlert("Please fill in all fields.", "error");
-
-            showAlert("Contacting HQ...", "success");
+            if(!name || !email || !password) return alert("Please fill all fields.");
 
             try {
-                const response = await fetch(`${API_URL}/register/`, {
+                const res = await fetch(`${API_URL}/register/`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ full_name: name, email: email, password: password })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ full_name: name, email, password })
                 });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    showAlert("✅ Account Created! Switching to Login...", "success");
-                    setTimeout(() => {
-                        toggleMode();
-                        document.getElementById('l-email').value = email; // Auto-fill email
-                    }, 1500);
+                const data = await res.json();
+                
+                if(res.ok) {
+                    alert("Account Created! Please Login.");
+                    toggleMode(); // Switch back to login
                 } else {
-                    showAlert("❌ Error: " + (data.detail || "Registration failed"), "error");
+                    alert("Error: " + data.detail);
                 }
-            } catch (err) {
-                console.error(err);
-                showAlert("⚠️ Connection Error. Is the server awake?", "error");
-            }
+            } catch(e) { alert("Server Offline"); }
         }
 
-        // --- 2. LOGIN FUNCTION ---
         async function handleLogin() {
             const email = document.getElementById('l-email').value;
             const password = document.getElementById('l-password').value;
-
-            if (!email || !password) return showAlert("Enter email and password.", "error");
-
-            showAlert("Verifying Credentials...", "success");
+            
+            if(!email || !password) return alert("Please enter email and password.");
 
             try {
-                const response = await fetch(`${API_URL}/login/`, {
+                const res = await fetch(`${API_URL}/login/`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email, password: password })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email, password})
                 });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    // STORE THE SESSION KEY
+                const data = await res.json();
+                
+                if(res.ok) {
                     sessionStorage.setItem("nbnexus_user", data.user);
-                    
-                    showAlert("✅ Access Granted. Loading Dashboard...", "success");
-                    
-                    // REDIRECT TO DASHBOARD
-                    setTimeout(() => {
-                        window.location.href = "index.html"; 
-                    }, 1000);
+                    window.location.href = "index.html";
                 } else {
-                    showAlert("⛔ Access Denied: " + (data.detail || "Invalid password"), "error");
+                    alert("Access Denied: " + (data.detail || "User not found"));
                 }
-            } catch (err) {
-                console.error(err);
-                showAlert("⚠️ Server unreachable. Check internet.", "error");
-            }
+            } catch(e) { alert("Server Offline"); }
         }
     </script>
 </body>
