@@ -1,3 +1,10 @@
+import sys
+import os
+
+# --- CLOUD FIX: Force Python to find 'models' and 'database' ---
+# This tells the server: "Look for files in the same folder where I am living right now."
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 import hashlib
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -107,7 +114,7 @@ def check_risk(region: str, db: Session = Depends(get_db)):
         return {"status": "SAFE", "message": "No active threats detected."}
     return {"status": "WARNING", "alerts": alerts}
 
-# --- 4. INTELLIGENCE ENGINE (Updated for Consistency) ---
+# --- 4. INTELLIGENCE ENGINE ---
 @app.post("/analyze-intel/")
 def analyze_intel(report: IntelReport, db: Session = Depends(get_db)):
     text = report.raw_text.lower()
