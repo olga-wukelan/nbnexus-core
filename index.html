@@ -156,12 +156,17 @@
     </div>
 
     <script>
+        
+        // =========================================================
+        // 🌍 LIVE CLOUD CONNECTION ESTABLISHED 🌍
+        // =========================================================
+        const API_URL = "https://nbnexus-live.onrender.com"; 
+        // =========================================================
+
         // --- 1. SECURITY CHECKPOINT ---
         const user = sessionStorage.getItem("nbnexus_user");
 
-        if (!user) {
-            window.location.href = "login.html";
-        } else {
+        if (user) {
             document.getElementById('user-display').innerText = "Cmdr. " + user; 
         }
 
@@ -181,7 +186,7 @@
         // --- 4. CHECK RISKS (Startup Check) ---
         async function checkRisks() {
             try {
-                const response = await fetch('http://127.0.0.1:8000/check-risk/Red Sea');
+                const response = await fetch(`${API_URL}/check-risk/Red Sea`);
                 const data = await response.json();
 
                 if (data.status === "WARNING") {
@@ -205,7 +210,7 @@
                     }).addTo(map);
                 }
             } catch (error) {
-                console.log("Brain is offline...");
+                console.log("Brain is offline or sleeping...");
             }
         }
 
@@ -216,7 +221,7 @@
             resultsArea.innerHTML = '<p>Searching Network...</p>';
 
             try {
-                const response = await fetch(`http://127.0.0.1:8000/find-service/${country}`);
+                const response = await fetch(`${API_URL}/find-service/${country}`);
                 const data = await response.json();
                 resultsArea.innerHTML = '';
 
@@ -253,7 +258,7 @@
             const list = document.getElementById('fleet-list');
 
             try {
-                const response = await fetch(`http://127.0.0.1:8000/my-fleet/${userEmail}`);
+                const response = await fetch(`${API_URL}/my-fleet/${userEmail}`);
                 const ships = await response.json();
 
                 list.innerHTML = ""; 
@@ -294,7 +299,7 @@
         async function addShipMock() {
             const shipName = prompt("Enter Ship Name:");
             if (shipName) {
-                await fetch('http://127.0.0.1:8000/add-ship/', {
+                await fetch(`${API_URL}/add-ship/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -308,13 +313,13 @@
             }
         }
 
-        // --- 7. AI INTEL PROCESSOR (The New Brain Feature!) ---
+        // --- 7. AI INTEL PROCESSOR ---
         async function processIntel() {
             const rawText = document.getElementById('intel-input').value;
             if (!rawText) return alert("Please enter intel data.");
 
             // Send text to Brain
-            const response = await fetch('http://127.0.0.1:8000/analyze-intel/', {
+            const response = await fetch(`${API_URL}/analyze-intel/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ raw_text: rawText })
