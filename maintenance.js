@@ -1,5 +1,6 @@
 "use strict";
 
+
 class Game {
   constructor() {
     this.cells = Array.from(document.querySelectorAll(".field-cell"));
