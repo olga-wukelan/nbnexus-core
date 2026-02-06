@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/((?!maintenance.html|maintenance.css|maintenance.js|images|favicon).*)",
+      "destination": "/maintenance.html",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/maintenance.html"
+    }
+  ]
+}

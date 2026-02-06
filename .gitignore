@@ -1,3 +1,62 @@
-venv/
+# --- Dependencies ---
+# These folders are heavy; they are installed locally via 'npm install'
+node_modules/
+
+# --- Build Tools (Parcel) ---
+# Temporary cache and production build folders
+dist/
+.parcel-cache/
+
+# --- Sensitive Data (Crucial!) ---
+# Never commit API keys, passwords, or secrets to GitHub.
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# --- Python Specific (Backend) ---
+# Ignore compiled Python files, virtual environments, and build artifacts
 __pycache__/
-*.db
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- Logs and Temporary Files ---
+# Ignore runtime logs and editor swap files
+*.log
+logs
+*.swp
+*.bak
+
+# --- Test Results ---
+# Ignore coverage reports and test caches
+coverage/
+.nyc_output/
+
+# --- IDE and System Files ---
+# Ignore local editor settings and OS-generated files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

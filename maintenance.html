@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NBNexus | System Maintenance</title>
+    <link rel="stylesheet" href="./maintenance.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/favicon" href="./images/favicon/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./images/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./images/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="./images/favicon/site.webmanifest(fixed).txt" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="maintenance-logo">
+        <img
+          src="./images/nb-nexus-logo-white-square.webp"
+          alt="NB-NEXUS Logo"
+          class="logo-img"
+          style="width: 80px; height: 80px"
+        />
+      </div>
+
+      <h1>NB-NEXUS</h1>
+      <p class="subtitle">
+        NB-NEXUS is charting new territories. <br />
+        We're currently optimizing our digital corridors. <br />
+        Enjoy a game of 2048 in the meantime.
+      </p>
+
+      <div class="game-header">
+        <div class="score-box">SCORE <span class="game-score">0</span></div>
+        <button class="button start">START GAME</button>
+      </div>
+      <table class="game-field">
+        <tbody>
+          <tr>
+            <td class="field-cell"></td>
+            <td class="field-cell"></td>
+            <td class="field-cell"></td>
+            <td class="field-cell"></td>
+          </tr>
+          <tr>
+            <td class="field-cell"></td>
+            <td class="field-cell"></td>
+            <td class="field-cell"></td>
+            <td class="field-cell"></td>
+          </tr>
+          <tr>
+            <td class="field-cell"></td>
+            <td class="field-cell"></td>
+            <td class="field-cell"></td>
+            <td class="field-cell"></td>
+          </tr>
+          <tr>
+            <td class="field-cell"></td>
+            <td class="field-cell"></td>
+            <td class="field-cell"></td>
+            <td class="field-cell"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="message-container">
+        <p class="message-start">Use arrow keys to move tiles</p>
+        <p class="message-lose hidden">Game Over! Press Start to retry.</p>
+        <p class="message-win hidden">2048! System Optimized!</p>
+      </div>
+    </div>
+  </body>
+  <script src="./maintenance.js" defer></script>
+</html>
